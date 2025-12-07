@@ -1,0 +1,162 @@
+# Prerequisites (likely specific to some build systems, keep if relevant)
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files (remove if not using Fortran)
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Visual Studio files and folders (Comprehensive exclusion)
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.sln
+*.vcxproj.user
+*.vcxproj.local
+*.suo
+*.opensdf
+*.sdf
+ipch/
+vc.db
+*.VC.db
+*.VC.opendb
+x64/
+Win32/
+_ReSharper.*/
+*.cachefile
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.vshistory/
+*.vcxproj.DotSettings
+*.vcxproj.DotSettings.user
+
+# Ignore the build folder
+build/
+
+# Build results (Common - adjust if your build system uses different names)
+[Dd]ebug/
+[Rr]elease/
+bld/
+[Bb]in/
+[Oo]bj/
+out/
+
+# Log files (Common)
+*.log
+[Ll]ogs/
+
+# CMake build artifacts (if using CMake - keep if relevant)
+CMakeCache.txt
+CMakeFiles/
+_CPack_Packages/
+CPackSourceConfigs/
+Testing/
+
+# Qt build artifacts (if using Qt - keep if relevant)
+*.moc
+*.ui.c
+*.ui.h
+*.rcc.c
+*.rcc.h
+*.qrc.cpp
+*.pro.user*
+
+# Other build artifacts and temporary files (Common)
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.rsp
+!Directory.Build.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.tlog
+
+# Code analysis tools (keep if you use them)
+*.dSYM/
+
+# Package managers (keep if you use them)
+vcpkg_installed/
+conan-build/
+conan-package/
+conan.lock
+
+# Personal or temporary files (Common)
+*.userprefs
+xcuserdata/
+.DS_Store
+Thumbs.db
+~$*
+*~
+
+# Other IDE/Tool specific files (remove if not relevant)
+*.plg        # Visual Studio 6 build log
+*.opt        # Visual Studio 6 workspace options
+*.vbw        # Visual Studio 6 auto-generated workspace
+*.vbp        # Visual Studio 6 auto-generated project
+*.dsw        # Visual Studio 6 workspace
+*.dsp        # Visual Studio 6 project
+*.ncb        # Visual Studio 6 technical file
+*.aps        # Visual Studio 6 technical file
+_Chutzpah* # Chutzpah Test files
+*.GhostDoc.xml # GhostDoc
+node_modules/ # Node.js
+__pycache__/  # Python
+*.pyc        # Python
+*.tss        # Tabs Studio
+*.jmconfig   # JustMock
+OpenCover/   # OpenCover
+ASALocalRun/ # Azure Stream Analytics
+*.binlog     # MSBuild Binary Log
+*.nvuser     # Nsight GPU debugger
+.mfractor/   # MFractors
+healthchecksdb # BeatPulse
+MigrationBackup/ # VS Package Ref Convert
+.ionide/     # Ionide
+FodyWeavers.xsd # Fody
+.vscode/* # VS Code (keep if you use VS Code as well)
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/    # VS Code Local History
+*.sln.iml    # JetBrains Rider
+
+# Remove patterns related to .NET specific tools and technologies
+# like MSTest, NUnit, BenchmarkDotNet, StyleCop, NuGet, Azure, etc.
+# (Removed in this refined list)
+/temp
