@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include "query.h"
 #include "entity_chunk_view.h"
+#include "query_builder.h"
 
 namespace TheEngine::ECS
 {
@@ -26,9 +27,12 @@ namespace TheEngine::ECS
 	public:
 		QuerySystem(ComponentRegistry& componentRegistry, EntityManager& entityManager, ArchetypeManager& archetypeManager);
 		
-
+		/* Depreciated Method */
 		template<typename... ComponentType>
 		Query getQuery();
+
+
+		QueryBuilder createQuery();
 
 		EntityChunkView getEntityChunkView(const EntityId& entityId);
 
@@ -59,6 +63,7 @@ namespace TheEngine::ECS
 		{
 			ArchetypeSignature archetypeSignature = it.first;
 
+			
 			if ((archetypeSignature & neededArchtypeSignatureMask) == neededArchtypeSignatureMask)
 			{
 				query.addArchetypeChunkHeaders(m_archetypeManager.getArchetypeChunksWithEntityData(archetypeSignature),m_componentRegistry);

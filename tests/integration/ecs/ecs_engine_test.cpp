@@ -414,3 +414,43 @@ TEST_F(ECSEngineTest, GetChunkRecordArray_ReturnsCorrectEntityIds)
         ASSERT_EQ(retrievedIds[i].id, expectedIds[i].id) << "Entity IDs in the record array do not match the expected IDs.";
     }
 }
+
+
+
+
+
+
+TEST_F(ECSEngineTest, QueryBuilder_SimpleWith)
+{
+    // Create E1: A, B (Should be included)
+    EntityId entityId_1 = m_ecsEngine->createEntity();
+    ComponentA componentA{};
+    m_ecsEngine->addComponentToEntity<ComponentA>(entityId_1, componentA);
+    ComponentB componentB{};
+    m_ecsEngine->addComponentToEntity<ComponentB>(entityId_1, componentB);
+
+    // Create E2: A only (Should be excluded)
+    EntityId entityId_2 = m_ecsEngine->createEntity();
+    ComponentA componentA_2{};
+    m_ecsEngine->addComponentToEntity<ComponentA>(entityId_2, componentA_2);
+
+    m_ecsEngine->processBufferedCommands();
+
+    // The query: must have ComponentA AND ComponentB
+    Query queryResult = m_ecsEngine->createQuery()
+        .with<ComponentA, ComponentB>()
+        .build();
+
+    size_t entityCount = 0;
+    for (auto& chunkArrayView : queryResult.getChunkArrayViews())
+    {
+        entityCount += chunkArrayView.getCount();
+
+        // Assert that the chunk must contain both arrays
+        ASSERT_NE(chunkArrayView.getComponentArray<ComponentA>(), nullptr);
+        ASSERT_NE(chunkArrayView.getComponentArray<ComponentB>(), nullptr);
+    }
+
+    // Only E1 should be included
+    ASSERT_EQ(entityCount, 1) << "QueryBuilder 'with' should only return entities with both A and B.";
+}
