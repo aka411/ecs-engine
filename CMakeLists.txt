@@ -26,6 +26,7 @@ add_library(TheEngine_ECS STATIC
    "src/query-system/chunk_array_view.cpp"
    "src/query-system/query.cpp"
    "src/null_fatal_error_handler.cpp" 
+   "src/query-system/query_builder.cpp" 
 )
 
 

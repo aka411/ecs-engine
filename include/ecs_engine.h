@@ -52,6 +52,8 @@ namespace TheEngine::ECS
 
 
 		/*Query System Area*/
+		QueryBuilder createQuery();
+
 
 		EntityChunkView getEntityChunkView(const EntityId& entityId);
 

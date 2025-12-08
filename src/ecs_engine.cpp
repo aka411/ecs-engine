@@ -82,6 +82,15 @@ namespace TheEngine::ECS
 
 	}
 
+
+	QueryBuilder ECSEngine::createQuery()
+	{
+		return QueryBuilder(m_componentRegistry, m_archetypeManager);
+	}
+
+
+
+
 	EntityChunkView ECSEngine::getEntityChunkView(const EntityId& entityId)
 	{
 		return m_querySystem.getEntityChunkView(entityId);
