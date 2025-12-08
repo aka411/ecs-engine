@@ -38,7 +38,14 @@ public:
         std::vector<int> dummyVector{ 1,3,5,7 };
     };
 
-
+    struct ComponentC
+    {
+        std::string text = "Hello";
+        float secondsPassed = 10.567;
+        int integer = 0;
+        std::vector<int> dummyVector{ 1,3,5,7 };
+        double d = 50.4444;
+    };
 
     void SetUp() override
     {
@@ -48,6 +55,8 @@ public:
 
         m_ecsEngine.get()->registerComponent<ComponentA>();
         m_ecsEngine.get()->registerComponent<ComponentB>();
+        m_ecsEngine.get()->registerComponent<ComponentC>();
+
 
     }
 
@@ -453,4 +462,79 @@ TEST_F(ECSEngineTest, QueryBuilder_SimpleWith)
 
     // Only E1 should be included
     ASSERT_EQ(entityCount, 1) << "QueryBuilder 'with' should only return entities with both A and B.";
+}
+
+
+
+
+
+TEST_F(ECSEngineTest, QueryBuilder_SimpleWithout_ExcludesCorrectEntities)
+{
+    // Create E1: A, B (Should be excluded by the 'without' query on ComponentB)
+    EntityId entityId_1 = m_ecsEngine->createEntity();
+    ComponentA componentA_1{};
+    m_ecsEngine->addComponentToEntity<ComponentA>(entityId_1, componentA_1);
+    ComponentB componentB_1{};
+    m_ecsEngine->addComponentToEntity<ComponentB>(entityId_1, componentB_1);
+
+    // Create E2: A only (Should be included, as it does NOT have ComponentB)
+    EntityId entityId_2 = m_ecsEngine->createEntity();
+    ComponentA componentA_2{};
+    m_ecsEngine->addComponentToEntity<ComponentA>(entityId_2, componentA_2);
+
+   
+
+    EntityId entityId_3 = m_ecsEngine->createEntity();
+    ComponentA componentA_3{};
+    m_ecsEngine->addComponentToEntity<ComponentA>(entityId_3, componentA_3);
+    ComponentC componentC_3{}; 
+    m_ecsEngine->addComponentToEntity<ComponentC>(entityId_3, componentC_3);
+
+    // Create E4: Only C 
+    EntityId entityId_4 = m_ecsEngine->createEntity();
+    ComponentC componentC_4{};
+    m_ecsEngine->addComponentToEntity<ComponentC>(entityId_4, componentC_4);
+
+    m_ecsEngine->processBufferedCommands();
+
+    // The query: must have ComponentA BUT must NOT have ComponentB
+    // This will match Archetypes {A} and {A, C}
+    Query queryResult = m_ecsEngine->createQuery()
+        .with<ComponentA>()
+        .without<ComponentB>()
+        .build();
+
+    size_t entityCount = 0;
+    std::vector<EntityId> retrievedIds;
+    for (auto& chunkArrayView : queryResult.getChunkArrayViews())
+    {
+        entityCount += chunkArrayView.getCount();
+
+        // Assert that the chunk MUST contain ComponentA but MUST NOT contain ComponentB
+        ASSERT_NE(chunkArrayView.getComponentArray<ComponentA>(), nullptr);
+        ASSERT_EQ(chunkArrayView.getComponentArray<ComponentB>(), nullptr);
+
+        // Retrieve IDs for final check
+        const EntityId* entityRecordArray = chunkArrayView.getChunkRecordArray();
+        for (size_t i = 0; i < chunkArrayView.getCount(); ++i)
+        {
+            retrievedIds.push_back(entityRecordArray[i]);
+        }
+    }
+
+    // E2 ({A}) and E3 ({A, C}) should be included. E1 ({A, B}) and E4 ({C}) should be excluded.
+    ASSERT_EQ(entityCount, 2) << "QueryBuilder 'without' should only return entities with A but without B.";
+
+    // Final check for the correct entities
+    bool foundE2 = false;
+    bool foundE3 = false;
+    for (const auto& id : retrievedIds)
+    {
+        if (id.id == entityId_2.id) foundE2 = true;
+        if (id.id == entityId_3.id) foundE3 = true;
+    }
+
+    ASSERT_TRUE(foundE2) << "Entity 2 ({A}) should be included.";
+    ASSERT_TRUE(foundE3) << "Entity 3 ({A, C}) should be included.";
+
 }
