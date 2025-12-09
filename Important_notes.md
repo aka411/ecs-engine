@@ -1,4 +1,4 @@
-
+# This contains the notes that i keep to track things i need to fix or improve.
 
 # Memory Leak !!!!
 
