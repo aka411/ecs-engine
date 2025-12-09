@@ -1,42 +1,45 @@
 #pragma once
 
 #include <vector>
+
+#include "i_fatal_error_handler.h"
+
 #include "component_registry.h"
-#include "common_data_types.h"
-#include "entity_manager.h"
-#include "archetype_manager.h"
-#include "command_buffer.h"
-#include "command_processor.h"
-#include "query-system/query_system.h"
 
 
-namespace TheEngine::ECS
+#include "query-system/entity_chunk_view.h"
+#include "query-system/query.h"
+#include "query-system/query_builder.h"
+#include "ecs_data_types.h"
+#include <memory>
+
+
+
+namespace ECS
 {
+	class ECSInternalManager;
 	class ECSEngine
 	{
 	private:
-	
+		
+		
 
 		IFatalErrorHandler& m_fatalErrorHandler;
 
-		ComponentRegistry m_componentRegistry;
-		EntityManager m_entityManager;
-		ArchetypeManager m_archetypeManager;
+		ComponentRegistry	 m_componentRegistry;//owner
+		
 
-		CommandBuffer m_commandBuffer;
-		CommandProcessor m_commandProcessor;
+		std::unique_ptr<ECSInternalManager> m_ecsInternalManager;//owner
 
-		QuerySystem m_querySystem;
-
-
-		void addComponntDataToEntity(std::vector<EntityAddInfo>& m_entityAddInfos);
-		void processDestructionOfEntities(std::vector<EntityId>& m_entityIdsToBeDestroyed);
+		void storeAddComponentCommand(const EntityId& entityId, const ComponentId componentId,void* ptr);
 
 	public:
 
 		ECSEngine(IFatalErrorHandler& fatalErrorHandler);
+		~ECSEngine();
 
 		EntityId createEntity();
+
 		void destroyEntity(EntityId& entityId);
 
 		template<typename ComponentType>
@@ -57,6 +60,7 @@ namespace TheEngine::ECS
 
 		EntityChunkView getEntityChunkView(const EntityId& entityId);
 
+		//Note : Depreciated Method , will get removed
 		template<typename... ComponentType>
 		inline Query getQuery();
 
@@ -77,26 +81,23 @@ namespace TheEngine::ECS
 	template<typename ComponentType>
 	void ECSEngine::addComponentToEntity(const EntityId& entityId, ComponentType& component)
 	{
-		Command command;
-		command.commandType = CommandType::ADD_COMPONENT;
-		command.componentId = m_componentRegistry.getComponentIdFromComponent<ComponentType>();
-		command.ptr = &component;
+		const ComponentId componentId = m_componentRegistry.getComponentIdFromComponent<ComponentType>();
 
-		//owner if the data the pointer points to is Component Registry and is managed by unique pointer so no dangling pointers
-		ComponentTypeInfo* componentTypeInfo = m_componentRegistry.getComponentTypeInfo(command.componentId);
-	
-		m_commandBuffer.storeCommand(entityId, command, componentTypeInfo);
+		storeAddComponentCommand(entityId,componentId, &component);
 
 	}
 
-
+	//Note : Depreciated Method , will get removed
 	template<typename... ComponentType>
 	inline Query ECSEngine::getQuery()
 	{
 
-		return m_querySystem.getQuery<ComponentType...>();
+		return createQuery().with<ComponentType...>().build();
+			
+			//m_ecsInternalManager.get().
+			//m_querySystem.getQuery<ComponentType...>();
 
 	}
-
+	
 
 }

@@ -1,18 +1,20 @@
 #pragma once
-
-#include "../common_data_types.h"
-#include "../component_registry.h"
-#include "../entity_manager.h"
-#include "../archetype_manager.h"
 #include <stdint.h>
-#include "query.h"
-#include "entity_chunk_view.h"
-#include "query_builder.h"
 
-namespace TheEngine::ECS
+
+#include "query-system/query_builder.h"
+#include "component_registry.h"
+
+
+#include "query-system/entity_chunk_view.h"
+
+
+namespace ECS
 {
 
-
+	class ComponentRegistry;
+	class EntityManager;
+	class ArchetypeManager;
 
 
 	class QuerySystem
@@ -25,11 +27,12 @@ namespace TheEngine::ECS
 		 ArchetypeManager& m_archetypeManager;
 
 	public:
+
 		QuerySystem(ComponentRegistry& componentRegistry, EntityManager& entityManager, ArchetypeManager& archetypeManager);
 		
 		/* Depreciated Method */
-		template<typename... ComponentType>
-		Query getQuery();
+		//template<typename... ComponentType>
+		//inline Query getQuery();
 
 
 		QueryBuilder createQuery();
@@ -42,7 +45,7 @@ namespace TheEngine::ECS
 
 
 
-
+	/*
 
 	template<typename... ComponentType>
 	inline Query QuerySystem::getQuery()
@@ -73,5 +76,5 @@ namespace TheEngine::ECS
 
 		return query;
 	}
-
+	*/
 }

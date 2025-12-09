@@ -1,11 +1,12 @@
 #include "bump_allocator.h"
 #include <cassert>
 
-namespace TheEngine::ECS
+namespace ECS
 {
 
 
 
+	// THIS CLASS CAUSES MEMORY LEAK
 
 	AllocatedBlockInfo BumpAllocator::getNewFreeBlock()
 	{
@@ -21,12 +22,13 @@ namespace TheEngine::ECS
 
 	void BumpAllocator::setNextFreeBlock()
 	{
+		/*
 		AllocatedBlockInfo newAllocatedBlockInfo = getNewFreeBlock();
 		assert(m_currentAllocatedBlockInfo.ptr != nullptr);
 		m_allocatedMemoryBlocks.push_back(newAllocatedBlockInfo);
 		m_currentAllocatedBlockInfo = newAllocatedBlockInfo;
 		m_currentBaseAddress = reinterpret_cast<std::uintptr_t>(m_currentAllocatedBlockInfo.ptr);
-		
+		*/
 	}
 
 	size_t  BumpAllocator::getRequiredPadding(const std::uintptr_t address, const size_t alignment)
@@ -78,7 +80,6 @@ namespace TheEngine::ECS
 	void  BumpAllocator::reset()
 	{
 		//TODO : free allocate blocks or reuse
-
 
 	}
 

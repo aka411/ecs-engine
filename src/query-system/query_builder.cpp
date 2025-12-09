@@ -1,11 +1,16 @@
-#include <query-system/query_builder.h>
+#include "query-system/query_builder.h"
+
+#include <unordered_map>
+#include<memory>
+
+#include "common_data_types.h"
+#include "archetype_manager.h"
 
 
 
 
 
-
-namespace TheEngine::ECS
+namespace ECS
 {
 
 
@@ -30,13 +35,13 @@ namespace TheEngine::ECS
 			ArchetypeSignature archetypeSignature = it.first;
 
 
-			if ((archetypeSignature & m_query.mustHaveMask) != m_query.mustHaveMask)
+			if ((archetypeSignature & m_mustHaveMask) != m_mustHaveMask)
 			{
 				continue;
 			}
 
 			//need to look into this
-			if ((archetypeSignature & m_query.mustNotHaveMask).any())
+			if ((archetypeSignature & m_mustNotHaveMask).any())
 			{
 				continue;
 			}

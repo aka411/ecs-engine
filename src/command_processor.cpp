@@ -1,7 +1,9 @@
 #include "command_processor.h"
 #include <cassert>
 
-namespace TheEngine::ECS
+#include "entity_manager.h"
+
+namespace ECS
 {
     CommandProcessor::CommandProcessor(EntityManager& entityManager): m_entityManager(entityManager)
     {

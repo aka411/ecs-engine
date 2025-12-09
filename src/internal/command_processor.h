@@ -1,18 +1,21 @@
 #pragma once
 #include <vector>
 #include <unordered_map>
+
 #include "common_data_types.h"
 #include "command_buffer.h"
-#include "entity_manager.h"
+#include "ecs_data_types.h"
 
-namespace TheEngine::ECS
+
+namespace ECS
 {
 	//Note : The current implememntation will only do destroy Entity and add Component To entity
-
+	class EntityManager;
 	class CommandProcessor
 	{
 
 	private:
+		
 
 		std::vector<EntityAddInfo> m_entityAddInfos;
 		std::vector<EntityId> m_entityIdsToBeDestroyed;

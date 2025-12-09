@@ -4,7 +4,7 @@
 
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
 
 

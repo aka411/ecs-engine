@@ -1,18 +1,12 @@
 #pragma once
 #include <functional>
 #include <typeindex>
-#include "common_data_types.h"
 
-namespace TheEngine::ECS
+#include "ecs_data_types.h"
+
+namespace ECS
 {
 	
-
-
-
-
-
-
-
 	class IComponentRegistry
 	{
 

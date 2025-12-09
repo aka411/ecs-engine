@@ -1,12 +1,17 @@
-#include "command_buffer.h"
 #include <cassert>
 
-namespace TheEngine::ECS
+#include "command_buffer.h"
+
+
+
+namespace ECS
 {
 	CommandBuffer::CommandBuffer()
 	{
 
 	}
+
+
 	void CommandBuffer::storeCommand(const EntityId& entityid, const Command& command, const ComponentTypeInfo* const componentTypeInfo)
 	{
 		//should i check generation?

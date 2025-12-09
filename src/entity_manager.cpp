@@ -1,10 +1,10 @@
 
 #include "entity_manager.h"
-#include <common_data_types.h>
+#include "common_data_types.h"
 #include <cassert>
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
 
 	const EntityId EntityManager::createEntity()

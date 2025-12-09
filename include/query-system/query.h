@@ -1,9 +1,17 @@
 #pragma once
 #include <vector>
+
 #include "chunk_array_view.h"
 
-namespace TheEngine::ECS
+
+
+
+namespace ECS
 {
+	struct ArchetypeChunkHeader;
+	class ComponentRegistry;
+
+
 	class Query
 	{
 	private:
@@ -12,9 +20,7 @@ namespace TheEngine::ECS
 		std::vector<ChunkArrayView> m_chunkArrayViews;
 
 	public:
-		//may be i should keep it in query builder?
-		ArchetypeSignature mustHaveMask = 0;
-		ArchetypeSignature mustNotHaveMask = 0;
+
 
 		Query();
 

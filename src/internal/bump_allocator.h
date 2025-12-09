@@ -3,12 +3,17 @@
 #include <cstdint>
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
+
+
+
+	// THIS CLASS CAUSES MEMORY LEAK
+
 	struct AllocatedBlockInfo
 	{
 		size_t sizeOfAllocatedMemory = 0;
-		void* ptr = nullptr;
+		void* basePtr = nullptr;
 
 	};
 
@@ -16,14 +21,12 @@ namespace TheEngine::ECS
 	{
 
 	private:
-		std::vector<AllocatedBlockInfo> m_allocatedMemoryBlocks;
+		std::vector<AllocatedBlockInfo> m_usedUpAllocatedMemoryBlocks;
 
 
 		AllocatedBlockInfo m_currentAllocatedBlockInfo;
 
-
-		std::uintptr_t m_currentBaseAddress = 0;
-		size_t m_currentUsedAmountOffset = 0;
+		size_t m_currentUsedSize = 0;
 
 
 		AllocatedBlockInfo getNewFreeBlock(); // affects m_currentAllocatedBlockInfo
