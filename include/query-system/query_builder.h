@@ -1,10 +1,12 @@
 #pragma once
-#include "query.h"
-#include "archetype_manager.h"
+#include "query-system/query.h"
 
 
-namespace TheEngine::ECS
+
+namespace ECS
 {
+	class ComponentRegistry;
+	class ArchetypeManager;
 
 	class QueryBuilder
 	{
@@ -13,6 +15,10 @@ namespace TheEngine::ECS
 
 		ComponentRegistry& m_componentRegistry;
 		ArchetypeManager& m_archetypeManager;
+
+	
+		ArchetypeSignature m_mustHaveMask = 0;
+		ArchetypeSignature m_mustNotHaveMask = 0;
 
 		Query m_query;
 
@@ -39,7 +45,7 @@ namespace TheEngine::ECS
 	template<typename ...ComponentType>
 	inline QueryBuilder& QueryBuilder::with()
 	{
-		(m_query.mustHaveMask.set(m_componentRegistry.getComponentIdFromComponent<ComponentType>()), ...);
+		(m_mustHaveMask.set(m_componentRegistry.getComponentIdFromComponent<ComponentType>()), ...);
 
 		return *this;
 	}
@@ -49,7 +55,7 @@ namespace TheEngine::ECS
 	template<typename ...ComponentType>
 	inline QueryBuilder& QueryBuilder::without()
 	{
-		(m_query.mustNotHaveMask.set(m_componentRegistry.getComponentIdFromComponent<ComponentType>()), ...);
+		(m_mustNotHaveMask.set(m_componentRegistry.getComponentIdFromComponent<ComponentType>()), ...);
 
 		return *this;
 	}

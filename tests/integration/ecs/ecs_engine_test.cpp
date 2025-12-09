@@ -1,17 +1,15 @@
 #include "gtest/gtest.h"
 
-
-#include "../../../include/common_data_types.h"
-#include "../../../include/ecs_engine.h"
-
 #include <algorithm>
 #include <string>
-#include "../../../include/null_fatal_error_handler.h"
+
+#include <ecs.h>
+
 
 
 //TODO : Write more tests and better ones 
 
-using namespace TheEngine::ECS;
+using namespace ECS;
 
 class ECSEngineTest : public testing::Test
 {
@@ -231,7 +229,7 @@ TEST_F(ECSEngineTest, MultipleEntities_AreIsolated)
 
 
 
-
+//Note : Depreciated Test , will remove in future
 TEST_F(ECSEngineTest, queryArray)
 {
   

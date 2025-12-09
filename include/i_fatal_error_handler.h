@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace TheEngine::ECS
+namespace ECS
 {
 	
 

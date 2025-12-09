@@ -9,7 +9,7 @@
 #include "i_fatal_error_handler.h"
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
 
 	//chunk raw size not be needed if we go with max entities per chunk approach

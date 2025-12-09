@@ -1,7 +1,7 @@
 #include "query-system/query.h"
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
 	Query::Query()
 	{

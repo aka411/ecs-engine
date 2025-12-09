@@ -1,7 +1,7 @@
 #include "component_registry.h"
 #include <cassert>
 
-namespace TheEngine::ECS
+namespace ECS
 {
 
 

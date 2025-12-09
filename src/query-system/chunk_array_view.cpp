@@ -1,9 +1,20 @@
-#include "query-system/chunk_array_view.h"
 #include <cassert>
 
+#include "query-system/chunk_array_view.h"
+#include "common_data_types.h"
 
-namespace TheEngine::ECS
+namespace ECS
 {
+	bool ChunkArrayView::archetypeDefinitionHasComponent(const ComponentId componentId) const
+	{
+		return m_archetypeDefinition->hasComponent(componentId);
+	}
+
+	size_t ChunkArrayView::getComponentOffset(const ComponentId componentTypeId) const
+	{
+		return m_archetypeDefinition->getComponentOffset(componentTypeId);
+	}
+
 	ChunkArrayView::ChunkArrayView(ArchetypeChunkHeader* archetypeChunkHeader, const ComponentRegistry& componentRegistry) : m_componentRegistry(componentRegistry)
 	{
 		assert(archetypeChunkHeader != nullptr);

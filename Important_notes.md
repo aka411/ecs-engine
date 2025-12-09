@@ -1,5 +1,6 @@
 
-# Potential Memory Leak !!!!
+
+# Memory Leak !!!!
 
 In this current design of the ECS system there is a memory leak in 
 destructor of Archetype Manager where we only free archetype chunk as 
@@ -7,6 +8,7 @@ whole to which ever allocator we got but since our ECS components are not
 simple POD(Plain ol  Data) we need to call destructor of each components in the 
 archetype chunk individually , this would require more complex destructor
 
+The destructor currently is kept simple cause i intent to redesign the memory allocation and deallocation code.
 
 # Bugs that cropped up during Testing
 

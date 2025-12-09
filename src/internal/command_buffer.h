@@ -1,17 +1,17 @@
 #pragma once
 #include <unordered_map>
-#include "common_data_types.h"
-#include "i_component_registry.h"
-#include "bump_allocator.h"
 
+#include "bump_allocator.h"
+#include "common_data_types.h"
+#include "ecs_data_types.h"
 
 
 namespace std
 {
 	template <>
-	struct hash<TheEngine::ECS::EntityId>
+	struct hash<ECS::EntityId>
 	{
-		size_t operator()(const TheEngine::ECS::EntityId& entityId) const
+		size_t operator()(const ECS::EntityId& entityId) const
 		{
 			// Need more thought here
 			size_t h1 = std::hash<size_t>{}(entityId.id);
@@ -21,7 +21,9 @@ namespace std
 	};
 }
 
-namespace TheEngine::ECS
+
+
+namespace ECS
 {
 	enum class CommandType
 	{

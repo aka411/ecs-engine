@@ -1,10 +1,11 @@
 #pragma once
 #include <stack>
 #include <vector>
+
 #include "common_data_types.h"
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
 
 	class EntityManager

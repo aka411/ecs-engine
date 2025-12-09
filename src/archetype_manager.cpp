@@ -2,13 +2,14 @@
 #include <vector>
 #include <memory>
 #include <cassert>
-#include "../include/archetype_manager.h"
-
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
 
-namespace TheEngine::ECS
+#include "archetype_manager.h"
+
+
+namespace ECS
 {
 
 

@@ -1,7 +1,9 @@
 #include "query-system/query_system.h"
 
+#include "entity_manager.h"
 
-namespace TheEngine::ECS
+
+namespace ECS
 {
 	QuerySystem::QuerySystem(ComponentRegistry& componentRegistry,EntityManager& entityManager, ArchetypeManager& archetypeManager) : m_componentRegistry(componentRegistry),m_entityManager(entityManager), m_archetypeManager(archetypeManager)
 	{

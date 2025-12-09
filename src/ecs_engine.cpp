@@ -1,25 +1,42 @@
 #include "ecs_engine.h"
+#include "command_buffer.h"
+#include "ecs_internal_manager.h"
 
-namespace TheEngine::ECS
+namespace ECS
 {
 
 
 
 
-	ECSEngine::ECSEngine(IFatalErrorHandler& fatalErrorHandler) :
-		m_fatalErrorHandler(fatalErrorHandler),
-		m_componentRegistry(),
-		m_entityManager(),
-		m_archetypeManager(m_componentRegistry, fatalErrorHandler),
-		m_commandProcessor(m_entityManager),
-		m_querySystem(m_componentRegistry, m_entityManager, m_archetypeManager)
+
+	void ECSEngine::storeAddComponentCommand(const EntityId& entityId, const ComponentId componentId, void* ptr)
 	{
+
+		Command command;
+		command.commandType = CommandType::ADD_COMPONENT;
+		command.componentId = componentId;
+		command.ptr = ptr;
+
+		//owner if the data the pointer points to is Component Registry and is managed by unique pointer so no dangling pointers
+		ComponentTypeInfo* componentTypeInfo = m_componentRegistry.getComponentTypeInfo(command.componentId);
+		
+		m_ecsInternalManager.get()->getCommandBuffer().storeCommand(entityId, command, componentTypeInfo);
 
 	}
 
+
+	ECSEngine::ECSEngine(IFatalErrorHandler& fatalErrorHandler) :
+		m_fatalErrorHandler(fatalErrorHandler)
+	{
+		m_ecsInternalManager = std::make_unique<ECSInternalManager>(fatalErrorHandler,m_componentRegistry);
+	}
+
+
+
+
 	EntityId ECSEngine::createEntity()
 	{
-		return m_entityManager.createEntity();
+		return m_ecsInternalManager.get()->createEntity();
 	}
 
 
@@ -30,62 +47,29 @@ namespace TheEngine::ECS
 		command.componentId = 0;
 		command.ptr = nullptr;
 
-		m_commandBuffer.storeCommand(entityId, command, nullptr);
+		m_ecsInternalManager.get()->getCommandBuffer().storeCommand(entityId, command, nullptr);
 
 
 	}
 
 
-	void ECSEngine::addComponntDataToEntity(std::vector<EntityAddInfo>& entityAddInfos)
-	{
-
-
-		for (const EntityAddInfo& entityAddInfo : entityAddInfos)
-		{
-
-			const std::vector<EntityRecordUpdate> EntityRecordUpdates = m_archetypeManager.addComponentToEntity(entityAddInfo);
-
-
-			for (const EntityRecordUpdate& entityRecordUpdate : EntityRecordUpdates)
-			{
-				m_entityManager.updateEntityRecord(entityRecordUpdate);
-			}
-
-		}
-
-
-
-	}
 
 	void  ECSEngine::processBufferedCommands()
 	{
-		std::unordered_map<EntityId, std::vector<Command>>& entityIdToCommands = m_commandBuffer.getCommandList();
-		m_commandProcessor.process(entityIdToCommands);
-		std::vector<EntityAddInfo>& entityAddInfos = m_commandProcessor.getEntityAddInfos();
 
-		addComponntDataToEntity(entityAddInfos);
-		m_commandProcessor.reset();
-		m_commandBuffer.reset();
-	}
-
-	void ECSEngine::processDestructionOfEntities(std::vector<EntityId>& m_entityIdsToBeDestroyed)
-	{
-
-		for (const EntityId& entityId : m_entityIdsToBeDestroyed)
-		{
-
-			//ToDo : Need to write code here and in Archetype Manager also
-
-		}
-
+			m_ecsInternalManager.get()->processBufferedCommands();
 
 
 	}
+
+
+
 
 
 	QueryBuilder ECSEngine::createQuery()
 	{
-		return QueryBuilder(m_componentRegistry, m_archetypeManager);
+		
+		return m_ecsInternalManager.get()->createQueryBuilder();
 	}
 
 
@@ -93,8 +77,15 @@ namespace TheEngine::ECS
 
 	EntityChunkView ECSEngine::getEntityChunkView(const EntityId& entityId)
 	{
-		return m_querySystem.getEntityChunkView(entityId);
+		return m_ecsInternalManager.get()->getEntityChunkView(entityId);
+
 	}
 
+
+	ECSEngine::~ECSEngine()
+	{
+		// The body can be empty. Its mere presence here is enough 
+		// to allow the compiler to correctly generate the unique_ptr's destructor call.
+	}
 
 }

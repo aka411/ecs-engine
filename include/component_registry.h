@@ -1,11 +1,13 @@
 #pragma once
-#include "i_component_registry.h"
-#include <memory>
-#include "common_data_types.h"
 #include <cassert>
 #include <stdexcept>
+#include <memory>
 
-namespace TheEngine::ECS
+#include "i_component_registry.h"
+
+#include "ecs_data_types.h"
+
+namespace ECS
 {
 
 
@@ -96,6 +98,7 @@ namespace TheEngine::ECS
 
 					new (destPtr) ComponentType(std::move(*srcComponentPtr));
 
+					
 				};
 
 			m_componentIdToTypeInfoMap[m_nextComponentId] = std::move(componentTypeInfo);

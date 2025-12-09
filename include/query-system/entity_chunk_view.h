@@ -1,11 +1,15 @@
 #pragma once
+#include <cstdint>
 
-#include "common_data_types.h"
+#include "ecs_data_types.h"
 #include "component_registry.h"
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
+	
+	struct ArchetypeDefinition;
+	struct EntityRecord;
 
 
 	class EntityChunkView
@@ -17,6 +21,10 @@ namespace TheEngine::ECS
 
 		ArchetypeDefinition* m_archetypeDefinition = nullptr;
 		std::uintptr_t m_chunkBaseAddress = 0;
+		size_t m_archetypeChunkSize = 0;
+
+		bool archetypeDefinitionHasComponent(const ComponentId componentId) const;
+		size_t getComponentOffset(const ComponentId componentTypeId) const;
 
 	public:
 
@@ -36,14 +44,14 @@ namespace TheEngine::ECS
 	{
 		ComponentId componentId = m_componentRegistry.getComponentIdFromComponent<ComponentType>();
 
-		if (!m_archetypeDefinition->hasComponent(componentId))
+		if (!archetypeDefinitionHasComponent(componentId))
 		{
 			return nullptr;
 		}
 
 
-		std::uintptr_t componentAddress = m_chunkBaseAddress + m_archetypeDefinition->GetComponentOffset(componentId) + sizeof(ComponentType) * m_offsetIndex;
-		assert(componentAddress < m_archetypeDefinition->chunkRawSize + m_chunkBaseAddress);
+		std::uintptr_t componentAddress = m_chunkBaseAddress + getComponentOffset(componentId) + sizeof(ComponentType) * m_offsetIndex;
+		assert(componentAddress < m_archetypeChunkSize + m_chunkBaseAddress);
 
 		return reinterpret_cast<ComponentType*>(componentAddress);
 	}

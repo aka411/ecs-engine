@@ -3,12 +3,17 @@
 #include <cstdint>
 
 
-namespace TheEngine::ECS
+namespace ECS
 {
+
+
+
+	// This is not fully implemented and currently it just uses aligned_malloc internally
+
 	struct AllocatedBlockInfo
 	{
 		size_t sizeOfAllocatedMemory = 0;
-		void* ptr = nullptr;
+		void* basePtr = nullptr;
 
 	};
 
@@ -16,14 +21,13 @@ namespace TheEngine::ECS
 	{
 
 	private:
-		std::vector<AllocatedBlockInfo> m_allocatedMemoryBlocks;
+		std::vector<AllocatedBlockInfo> m_usedUpAllocatedMemoryBlocks;
 
+		std::vector<void*> m_allocatedBlocks;
 
 		AllocatedBlockInfo m_currentAllocatedBlockInfo;
 
-
-		std::uintptr_t m_currentBaseAddress = 0;
-		size_t m_currentUsedAmountOffset = 0;
+		size_t m_currentUsedSize = 0;
 
 
 		AllocatedBlockInfo getNewFreeBlock(); // affects m_currentAllocatedBlockInfo
