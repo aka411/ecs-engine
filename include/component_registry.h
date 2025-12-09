@@ -98,6 +98,7 @@ namespace ECS
 
 					new (destPtr) ComponentType(std::move(*srcComponentPtr));
 
+					
 				};
 
 			m_componentIdToTypeInfoMap[m_nextComponentId] = std::move(componentTypeInfo);

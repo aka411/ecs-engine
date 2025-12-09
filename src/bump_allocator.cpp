@@ -73,14 +73,19 @@ namespace ECS
 		*/
 
 		//FOR MVP
-		return _aligned_malloc(size,alignment);
+		m_allocatedBlocks.push_back(_aligned_malloc(size, alignment));
+		return m_allocatedBlocks.back();
 	}
 
 
 	void  BumpAllocator::reset()
 	{
-		//TODO : free allocate blocks or reuse
-
+		
+		for (auto& ptr : m_allocatedBlocks)
+		{
+			_aligned_free(ptr);
+		}
+		m_allocatedBlocks.resize(0);//very important
 	}
 
 

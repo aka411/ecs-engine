@@ -8,7 +8,7 @@ namespace ECS
 
 
 
-	// THIS CLASS CAUSES MEMORY LEAK
+	// This is not fully implemented and currently it just uses aligned_malloc internally
 
 	struct AllocatedBlockInfo
 	{
@@ -23,6 +23,7 @@ namespace ECS
 	private:
 		std::vector<AllocatedBlockInfo> m_usedUpAllocatedMemoryBlocks;
 
+		std::vector<void*> m_allocatedBlocks;
 
 		AllocatedBlockInfo m_currentAllocatedBlockInfo;
 

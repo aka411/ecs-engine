@@ -39,6 +39,7 @@ namespace ECS
 			assert(srcPtr != nullptr);
 			assert(componentTypeInfo != nullptr);
 
+			
 			componentTypeInfo->moveConstructor(destPtr, srcPtr);
 
 			localCommand.ptr = destPtr;
@@ -65,5 +66,6 @@ namespace ECS
 	void CommandBuffer::reset()
 	{
 		m_entityIdToBufferedCommandMap.clear();
+		m_bumpAllocator.reset();
 	}
 }
