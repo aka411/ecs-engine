@@ -8,6 +8,7 @@ After creating a minimum working prototype, I decided to move the ECS into its o
 
 All future development and feature additions for this ECS will be handled in this repository.
 
+It is unit tested.
 
 ### Architecture Diagram
 
