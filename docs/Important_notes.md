@@ -48,3 +48,25 @@ Need to think about adding a invalid entity id and component id to express inval
 # TODO IMPORTANT
 
 1) Should 	`ComponentId ComponentRegistry::getComponentIdFromComponent() const` method in componentManager be const amd not allow creation of new component.
+
+
+# Issue regarding ArchetypeChunkRecord struct
+	struct ArchetypeRecordChunk
+	{
+		EntityId id[];
+
+	};
+  //The use of  alignof(ArchetypeRecordChunk) is little bad cause what if compiler inserts padding in ArchetypeChunkRecord struct
+		void* ArchetypeRecordChunkRawPtr = _aligned_malloc(MAX_NUM_OF_ENTITIES_PER_CHUNK*sizeof(EntityId), alignof(ArchetypeRecordChunk));
+
+
+  The fix is to change to 	
+  
+	struct ArchetypeRecordChunk
+	{
+		EntityId* id = nullptr;
+	};
+
+  and very importantly use 
+  	void* ArchetypeRecordChunkRawPtr = _aligned_malloc(MAX_NUM_OF_ENTITIES_PER_CHUNK*sizeof(EntityId), alignof(EntityId));
+    !!! DONT USE  alignof(ArchetypeRecordChunk));
