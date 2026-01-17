@@ -21,17 +21,17 @@ namespace ECS
 	class ECSEngine
 	{
 	private:
+
+
 		
-		
+		IFatalErrorHandler& m_fatalErrorHandler;// passed by user of ecs system
 
-		IFatalErrorHandler& m_fatalErrorHandler;
+		ComponentRegistry	 m_componentRegistry;//Owner
 
-		ComponentRegistry	 m_componentRegistry;//owner
-		
 
-		std::unique_ptr<ECSInternalManager> m_ecsInternalManager;//owner
+		std::unique_ptr<ECSInternalManager> m_ecsInternalManager;//Owner
 
-		void storeAddComponentCommand(const EntityId& entityId, const ComponentId componentId,void* ptr);
+		void storeAddComponentCommand(const EntityId& entityId, const ComponentId componentId, void* ptr);
 
 	public:
 
@@ -54,15 +54,13 @@ namespace ECS
 
 
 
-		/*Query System Area*/
+		/*** Query System Area ***/
+
+		//For bulk iteration
 		QueryBuilder createQuery();
 
-
+		//For single Entity
 		EntityChunkView getEntityChunkView(const EntityId& entityId);
-
-		//Note : Depreciated Method , will get removed
-		template<typename... ComponentType>
-		inline Query getQuery();
 
 
 	};
@@ -83,21 +81,10 @@ namespace ECS
 	{
 		const ComponentId componentId = m_componentRegistry.getComponentIdFromComponent<ComponentType>();
 
-		storeAddComponentCommand(entityId,componentId, &component);
+		storeAddComponentCommand(entityId, componentId, &component);
 
 	}
 
-	//Note : Depreciated Method , will get removed
-	template<typename... ComponentType>
-	inline Query ECSEngine::getQuery()
-	{
 
-		return createQuery().with<ComponentType...>().build();
-			
-			//m_ecsInternalManager.get().
-			//m_querySystem.getQuery<ComponentType...>();
-
-	}
-	
 
 }

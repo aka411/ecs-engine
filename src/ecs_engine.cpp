@@ -84,8 +84,7 @@ namespace ECS
 
 	ECSEngine::~ECSEngine()
 	{
-		// The body can be empty. Its mere presence here is enough 
-		// to allow the compiler to correctly generate the unique_ptr's destructor call.
+
 	}
 
 }

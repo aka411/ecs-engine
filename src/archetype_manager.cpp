@@ -1,21 +1,21 @@
 
 #include <vector>
-#include <memory>
 #include <cassert>
 #include <algorithm>
 #include <cstdlib>
-#include <iostream>
+
 
 #include "archetype_manager.h"
-
+#include "i_component_registry.h"
 
 namespace ECS
 {
 
 
-	//Futre work : clean up
-	//Error Handling : We are gonna do strict error handling in this class as any error here can cause silent data corruption,
-	//                 any unexpected beahavior should be handled by shutting down the engine and logging the error
+	//Future work : clean up
+	//Error Handling : Any error occurs, we  call a error 
+	// handler which user has passed into the ecs system
+	//               
 
 
 
