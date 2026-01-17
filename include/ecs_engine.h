@@ -21,17 +21,17 @@ namespace ECS
 	class ECSEngine
 	{
 	private:
-		
-		
+
+
 
 		IFatalErrorHandler& m_fatalErrorHandler;
 
 		ComponentRegistry	 m_componentRegistry;//owner
-		
+
 
 		std::unique_ptr<ECSInternalManager> m_ecsInternalManager;//owner
 
-		void storeAddComponentCommand(const EntityId& entityId, const ComponentId componentId,void* ptr);
+		void storeAddComponentCommand(const EntityId& entityId, const ComponentId componentId, void* ptr);
 
 	public:
 
@@ -79,10 +79,10 @@ namespace ECS
 	{
 		const ComponentId componentId = m_componentRegistry.getComponentIdFromComponent<ComponentType>();
 
-		storeAddComponentCommand(entityId,componentId, &component);
+		storeAddComponentCommand(entityId, componentId, &component);
 
 	}
 
-	
+
 
 }

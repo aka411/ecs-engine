@@ -1,13 +1,12 @@
 
 #include <vector>
-#include <memory>
 #include <cassert>
 #include <algorithm>
 #include <cstdlib>
-#include <iostream>
+
 
 #include "archetype_manager.h"
-
+#include "i_component_registry.h"
 
 namespace ECS
 {

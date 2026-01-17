@@ -1,10 +1,9 @@
 #pragma once
 #include <vector>
-#include <bitset>
 #include <unordered_map>
 #include <memory>
 
-#include "i_component_registry.h"
+
 #include "common_data_types.h"
 #include "i_fatal_error_handler.h"
 
@@ -22,17 +21,18 @@ namespace ECS
 	{
 		//owner of memory region is allocator
 		//full chunks will be full of data
-		//in availabe chunk top might have data
+		//availableChunks is the one being filled
 		std::vector<ArchetypeChunkHeader*> fullChunks;
 		std::vector<ArchetypeChunkHeader*>  availableChunks;
 	};
 
 
+	class IComponentRegistry;
 
 	class ArchetypeManager
 	{
 
-
+		
 	private:
 
 
