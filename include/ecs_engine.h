@@ -60,10 +60,6 @@ namespace ECS
 
 		EntityChunkView getEntityChunkView(const EntityId& entityId);
 
-		//Note : Depreciated Method , will get removed
-		template<typename... ComponentType>
-		inline Query getQuery();
-
 
 	};
 
@@ -87,17 +83,6 @@ namespace ECS
 
 	}
 
-	//Note : Depreciated Method , will get removed
-	template<typename... ComponentType>
-	inline Query ECSEngine::getQuery()
-	{
-
-		return createQuery().with<ComponentType...>().build();
-			
-			//m_ecsInternalManager.get().
-			//m_querySystem.getQuery<ComponentType...>();
-
-	}
 	
 
 }

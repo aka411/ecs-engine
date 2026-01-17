@@ -261,7 +261,7 @@ TEST_F(ECSEngineTest, queryArray)
 
     m_ecsEngine->processBufferedCommands();
 
-    auto queryResult = m_ecsEngine->getQuery<ComponentA, ComponentB>();
+    auto queryResult = m_ecsEngine->createQuery().with<ComponentA, ComponentB>().build();
 
 
 
@@ -357,7 +357,7 @@ TEST_F(ECSEngineTest, GetChunkRecordArray_ReturnsCorrectEntityIds)
     m_ecsEngine->processBufferedCommands();
 
     // 2. Query for the created entities
-    auto queryResult = m_ecsEngine->getQuery<ComponentA, ComponentB>();
+    auto queryResult = m_ecsEngine->createQuery().with<ComponentA, ComponentB>().build();
 
     // 3. Iterate through ChunkArrayViews and validate the record array
     size_t totalEntitiesFound = 0;
