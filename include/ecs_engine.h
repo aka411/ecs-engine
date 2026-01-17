@@ -23,13 +23,13 @@ namespace ECS
 	private:
 
 
+		
+		IFatalErrorHandler& m_fatalErrorHandler;// passed by user of ecs system
 
-		IFatalErrorHandler& m_fatalErrorHandler;
-
-		ComponentRegistry	 m_componentRegistry;//owner
+		ComponentRegistry	 m_componentRegistry;//Owner
 
 
-		std::unique_ptr<ECSInternalManager> m_ecsInternalManager;//owner
+		std::unique_ptr<ECSInternalManager> m_ecsInternalManager;//Owner
 
 		void storeAddComponentCommand(const EntityId& entityId, const ComponentId componentId, void* ptr);
 
@@ -54,10 +54,12 @@ namespace ECS
 
 
 
-		/*Query System Area*/
+		/*** Query System Area ***/
+
+		//For bulk iteration
 		QueryBuilder createQuery();
 
-
+		//For single Entity
 		EntityChunkView getEntityChunkView(const EntityId& entityId);
 
 
