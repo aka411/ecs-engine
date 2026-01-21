@@ -13,8 +13,8 @@ ecs/ecs_engine_test.cpp
 
 target_link_libraries(ecs-integration-test PRIVATE
     GTest::gtest_main
-    GTest::gmock_main
-    TheEngine_ECS
+    #GTest::gmock_main
+    ECSEngine::ECSEngine
 
 )
 

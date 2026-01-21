@@ -1,4 +1,3 @@
-
 #include <vector>
 #include <cassert>
 #include <algorithm>
@@ -15,7 +14,7 @@ namespace ECS
 	//Future work : clean up
 	//Error Handling : Any error occurs, we  call a error 
 	// handler which user has passed into the ecs system
-	//               
+            
 
 
 
@@ -29,8 +28,7 @@ namespace ECS
 			assert(archetypeChunkHeader != nullptr);
 			
 			m_fatalErrorHandler.requestFatalTermination("Archetype Manager : ArchetypeChunkHeader is nullptr in moveArchetypeHeaderChunkToCorrectList");
-			//TODO : Call engine shutdown and error handling here as this is a serious error
-
+			
 			return false;//code excecution should never reach here
 
 		}
