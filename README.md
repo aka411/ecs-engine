@@ -1,5 +1,6 @@
 # ECS Engine
 [![CI Build Status](https://github.com/aka411/ecs-engine/actions/workflows/ci.yml/badge.svg)](https://github.com/aka411/ecs-engine/actions/workflows/ci.yml)
+
 A custom-built **Entity Component System (ECS)**, originally developed as a subsystem for a game engine project I was working on.
 
 After creating a minimum working prototype, I decided to move the ECS into its own dedicated repository where I can easily develop it as a standalone project.
