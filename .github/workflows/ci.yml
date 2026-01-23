@@ -1,0 +1,42 @@
+name: CI Build and Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    name: ${{ matrix.os }} Build
+    strategy:
+      fail-fast: false 
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Configure CMake
+
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      
+    - name: Build Project
+      run: cmake --build build --config Release
+      
+    - name: Run Unit Tests
+
+      working-directory: ./build
+      shell: bash
+      run: |
+        if [[ "${{ runner.os }}" == "Windows" ]]; then
+          ctest -C Release --output-on-failure
+        else
+          ctest --output-on-failure
+        fi
+
+
