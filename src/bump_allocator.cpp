@@ -73,7 +73,13 @@ namespace ECS
 		*/
 
 		//FOR MVP
-		m_allocatedBlocks.push_back(_aligned_malloc(size, alignment));
+		//m_allocatedBlocks.push_back(_aligned_malloc(size, alignment));
+		void* ptr = malloc(size);
+
+		assert(ptr != nullptr);
+		assert((reinterpret_cast<std::uintptr_t>(ptr) % alignment) == 0);
+
+		m_allocatedBlocks.push_back(ptr);
 		return m_allocatedBlocks.back();
 	}
 
@@ -83,7 +89,9 @@ namespace ECS
 		
 		for (auto& ptr : m_allocatedBlocks)
 		{
-			_aligned_free(ptr);
+			//_aligned_free(ptr);
+			free(ptr);
+
 		}
 		m_allocatedBlocks.resize(0);//very important
 	}
