@@ -44,7 +44,7 @@ namespace ECS
 	{
 		Command command;
 		command.commandType = CommandType::DESTROY_ENTITY;
-		command.componentId = 0;
+		command.componentId = 0;// Might need to consider a null component Id.
 		command.ptr = nullptr;
 
 		m_ecsInternalManager.get()->getCommandBuffer().storeCommand(entityId, command, nullptr);

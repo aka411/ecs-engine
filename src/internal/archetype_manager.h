@@ -11,10 +11,8 @@
 namespace ECS
 {
 
-	//chunk raw size not be needed if we go with max entities per chunk approach
-	//constexpr size_t CHUNK_RAW_SIZE = 16 * 1024;
-	
 
+	
 
 
 	struct ChunkList
@@ -47,24 +45,13 @@ namespace ECS
 
 		IComponentRegistry& m_componentRegistry;
 
-		/*
-		struct ComponentLayout
-		{
-			ComponentId componentId = 0;
 
-			//consider removing these after checking if its used anywhere
-			uint32_t size = 0; //redundant already in ComponentTypeinfo
-			uint32_t alignment = 0;//redundant already in ComponentTypeinfo
-
-			size_t offsetInChunk = 0; //offset in chunk memory region
-
-			ComponentTypeInfo* componentTypeInfo;
-
-
-		};
-		*/
 
 		//Methods:
+		void* allocateAlignedMemory(const size_t size, const int alignment);
+		void deallocateAlignedMemory(void* ptr);
+
+
 		bool moveArchetypeHeaderChunkToCorrectList(std::vector<ArchetypeChunkHeader*>& destChunkList, std::vector<ArchetypeChunkHeader*>& srcChunkList, ArchetypeChunkHeader* archetypeChunkHeader);
 		
 
@@ -105,16 +92,10 @@ namespace ECS
 		~ArchetypeManager();
 
 
+
 		std::vector<EntityRecordUpdate> addComponentToEntity(EntityAddInfo entityAddInfo);
 
 
-
-
-		//std::vector<EntityRecordUpdate> removeComponentFromEntity(EntityRemoveInfo entityAddInfo);//ToDo : Need more thought here
-		//For MVP we are not gonna implement this
-
-
-		//std::vector<EntityRecordUpdate> deleteEntityData(EntityRecord* entityRecord);//Entity record null check will be performed by the orchastrator
 
 
 		const std::unordered_map<ArchetypeSignature, std::unique_ptr<ArchetypeDefinition>>& getArchetypeDefinitions() const;

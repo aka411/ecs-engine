@@ -18,6 +18,31 @@ namespace ECS
 
 
 
+	void* ArchetypeManager::allocateAlignedMemory(const size_t size, const int alignment)
+	{
+		void* ptr = malloc(size);
+
+		assert(ptr != nullptr);
+		assert((reinterpret_cast<std::uintptr_t>(ptr) % alignment) == 0);
+
+
+		return ptr;
+
+		//return _aligned_malloc(size, alignment);
+		
+	}
+
+	void ArchetypeManager::deallocateAlignedMemory(void* ptr)
+	{
+		free(ptr);
+		// _aligned_free(ptr);
+	}
+
+
+
+
+
+
 	bool ArchetypeManager::moveArchetypeHeaderChunkToCorrectList(std::vector<ArchetypeChunkHeader*>& destChunkList, std::vector<ArchetypeChunkHeader*>& srcChunkList, ArchetypeChunkHeader* archetypeChunkHeader)
 	{
 		//REVIEW : DONE
@@ -877,7 +902,13 @@ namespace ECS
 		//REVIEW : Done
 		//Aim : To allocate a new ArchetypeChunkHeader along with ArchetypeChunk and ArchetypeRecordChunk from ArchetypeDefinition
 
-		void* archetypeChunkHeaderRawPtr = _aligned_malloc( sizeof(ArchetypeChunkHeader), alignof(ArchetypeChunkHeader));
+	   //TODO Note : Before shutdown is called need to free all allocated memory
+	   //Here it is little tricky due to raw handling of raw memory, its a design problem that i need to redesign later to enforce better memory cleanup.
+      
+
+
+		void* archetypeChunkHeaderRawPtr = allocateAlignedMemory( sizeof(ArchetypeChunkHeader), alignof(ArchetypeChunkHeader));
+		
 
 		if (archetypeChunkHeaderRawPtr == nullptr)
 		{
@@ -890,44 +921,41 @@ namespace ECS
 		}
 
 
-		//TODO : Repalce with correct alignment requirement
 		//TODO : Handling of zeroSignature, this is a bug found during testing
 		assert(archetypeDefinition->componentLayouts.size() > 0);
-		void* archetypeChunkRawPtr = _aligned_malloc(archetypeDefinition->chunkRawSize, archetypeDefinition->componentLayouts[0].alignment);
-		
+
+		void* archetypeChunkRawPtr = allocateAlignedMemory(archetypeDefinition->chunkRawSize, archetypeDefinition->componentLayouts[0].alignment);
+	
+
 		if (archetypeChunkRawPtr == nullptr)
 		{
-			_aligned_free(archetypeChunkHeaderRawPtr);//TODO : these are fragile need better way to do this 
+
 			assert(archetypeChunkRawPtr != nullptr);
 		
 			m_fatalErrorHandler.requestFatalTermination("Archetype Manager : Memory allocation failed for new ArchetypeChunk");
 
-			//TODO : Call engine shutdown and error handling here as this is a serious error
-	            //CODE EXECUTION STOPS HERE
-			
 		}
 
-		void* ArchetypeRecordChunkRawPtr = _aligned_malloc(MAX_NUM_OF_ENTITIES_PER_CHUNK*sizeof(EntityId), alignof(ArchetypeRecordChunk));
-		
+		void* ArchetypeRecordChunkRawPtr = allocateAlignedMemory(MAX_NUM_OF_ENTITIES_PER_CHUNK*sizeof(EntityId), alignof(ArchetypeRecordChunk));
+	
+
 		if (ArchetypeRecordChunkRawPtr == nullptr)
 		{
-			_aligned_free(archetypeChunkHeaderRawPtr);
-			_aligned_free(archetypeChunkRawPtr);
+			//_aligned_free(archetypeChunkHeaderRawPtr);
+			//_aligned_free(archetypeChunkRawPtr);
 			assert(ArchetypeRecordChunkRawPtr != nullptr);
 		
 			m_fatalErrorHandler.requestFatalTermination("Archetype Manager : Memory allocation failed for new ArchetypeRecordChunk");
 
-			//TODO : Call engine shutdown and error handling here as this is a serious error
-				//CODE EXECUTION STOPS HERE
 			
 		}
 
 
-		//All allocations were successful
 
-		//casting them to correct type
+
 		//ArchetypeChunkHeader* newArchetypeChunkHeader = static_cast<ArchetypeChunkHeader*>(archetypeChunkHeaderRawPtr);
 
+		//Initialising
 		ArchetypeChunkHeader* newArchetypeChunkHeader = new (archetypeChunkHeaderRawPtr) ArchetypeChunkHeader();
 
 		ArchetypeChunk* newArchetypeChunk = static_cast<ArchetypeChunk*>(archetypeChunkRawPtr);
@@ -1141,16 +1169,20 @@ namespace ECS
 				ChunkList& chunkList = pair.second;
 				for (ArchetypeChunkHeader* chunkHeader : chunkList.fullChunks)
 				{
-					_aligned_free(chunkHeader->archetypeChunk);
-					_aligned_free(chunkHeader->archetypeRecordChunk);
-					_aligned_free(chunkHeader);
+					
+					deallocateAlignedMemory(chunkHeader->archetypeChunk);
+					deallocateAlignedMemory(chunkHeader->archetypeRecordChunk);
+					deallocateAlignedMemory(chunkHeader);
+
 				}
 
 				for (ArchetypeChunkHeader* chunkHeader : chunkList.availableChunks)
 				{
-					_aligned_free(chunkHeader->archetypeChunk);
-					_aligned_free(chunkHeader->archetypeRecordChunk);
-					_aligned_free(chunkHeader);
+					
+					deallocateAlignedMemory(chunkHeader->archetypeChunk);
+					deallocateAlignedMemory(chunkHeader->archetypeRecordChunk);
+					deallocateAlignedMemory(chunkHeader);
+				
 				}
 			}
 
