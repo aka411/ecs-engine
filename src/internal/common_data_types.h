@@ -89,11 +89,8 @@ namespace ECS
 
 	struct ArchetypeRecordChunk
 	{
-		//ToDo : need to hashout the alignment requirements here when storing in chunk
-		//size_t maxCount = 0; //max entities ids that can be stored in this chunk
-		//this maxCount should actually be in Archetype header but since we cannot use only id[] FAM we need here to avoid zero size array
-		EntityId id[];
-
+		
+		EntityId id[1];//hacky 
 
 	};
 
