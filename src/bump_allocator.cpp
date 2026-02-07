@@ -1,5 +1,7 @@
 #include "bump_allocator.h"
 #include <cassert>
+#include <cstdlib>
+
 
 namespace ECS
 {
